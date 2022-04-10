@@ -1,0 +1,39 @@
+Terminología importante
+DOM: Estructura de árbol jerárquica que lee el navegador
+DOMContentLoaded: Se garantiza que ya está cargado todo el documento y está disponible para manipular
+Lectura de los scripts por el browser
+Cuando el browser encuentra una etiqueta la lee y detiene la ejecución del código hasta terminar, ésto significa que:
+
+Hay que leerlo
+Hay que ejecutarlo
+Cuando tenemos un script previo al contenido, y se ejecuta, todavía no está cargado lo demás del DOM, por lo que no podemos acceder a los elementos, por lo tanto, se recomienda que el script se corra después de que se cargue el elemento
+
+Cuando llamamos a un archivo, el browser detiene la ejecución del código a menos de que utilicemos la propiedad async o defer.
+
+Async
+En caso de usar async no se va a detener la ejecución del DOM, hasta que llegue la respuesta
+
+<script async src=“script.js”>
+Al trabajar con respuestas asíncronas es difícil predecir cuál se responderá primero, normalmente el más pequeño o con mejor respuesta de servidor llegará primero y detendrá la ejecución y no se responderá otro script antes de que termine
+
+Defer
+En caso de usar defer, la respuesta sucederá asíncronamente, pero no se llamará hasta que no termine de leer el DOM
+
+<script defer src=“script.js”>
+
+
+¿Cómo llega un script al browser?
+
+Cuándo el navegador está armando el DOM, y se encuentra con una etiqueta script, detiene el procesamiento de HTML y se encarga de hacer el fetch y execute del Javascript en dicha etiqueta. Una vez termina la ejecución, se continua el armado del DOM.
+
+Atributos de la etiqueta script:
+
+Async: el procesamiento del DOM va a continuar mientras se ejecuta el fetch del Javascript. Solo va a detenerse cuando este esté disponible para su ejecución.
+Defer: el fetch se va a realizar de manera asíncrona, igual que con el atributo anterior. Pero va a aplazar la ejecución del javascript hasta que el DOM esté completo.
+
+El DOM es la representación de un documento HTML.
+Cuando llega el HTML al browser, este lo empieza a parsear: Va leyendo etiqueta por etiqueta y va creando el DOM. Cuando este proceso termina por completo es cuando obtenemos el evento <code>DOMContentLoaded</code>.
+Cuando el navegador encuentra script en medio del HTML va a dejar de leer las etiquetas y ejecutará el script, luego continuará leyendo.
+
+
+una pagina con ref: https://manzdev.github.io/script-type/
