@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <a href="/ejercicios/">Go back</a>
+    <h1><code>Herencia prototipal</code></h1>
+    <p><em>Abre la consola</em></p>
+</body>
+<script>
+
+    function Hero(name){
+
+        this.name = name
+    }
+
+    Hero.prototype.saludar = function() {
+
+        return console.log(`Hola soy ${this.name}`)
+    }
+
+    const linterna_verde = new Hero('Linterna verde')
+
+    //Propiedades de la herencia 
+    console.log(`Name: ${linterna_verde.name}`)//Linterna verde
+
+    //Propiedades de la clase 
+    console.log(`Saludar: ${linterna_verde.saludar}`)//Saludar: function() {
+                                                    // return console.log(`Hola soy ${this.name}`)
+                                                    // }
+
+    //Propiedades heredadas 
+    //De otros prototipos, en este caso de Object
+    console.log(`toString: ${linterna_verde.toString}`)//toString: function toString() { [native code] }
+
+    //hasOwnProperty (de donde sale esta propiedad?)
+    console.log(`literna_verde.hasOwnProperty("name"): ${linterna_verde.hasOwnProperty("name")}`) //true
+    console.log(`literna_verde.hasOwnProperty("saludar"): ${linterna_verde.hasOwnProperty("saludar")}`) //false porque no es de la instancia, lo tomó prestado
+
+
+    const prototype_of_linternaVerde = Object.getPrototypeOf(linterna_verde)
+    console.log(Object.getPrototypeOf(linterna_verde))//{saludar: ƒ, constructor: ƒ}
+
+    console.log(prototype_of_linternaVerde.hasOwnProperty("toString"))//false, porque es del proto Object
+    
+    console.log(prototype_of_linternaVerde === Hero.prototype)//true
+</script>
+</html>
