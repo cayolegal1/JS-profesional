@@ -13,7 +13,7 @@ const player = new MediaPlayer({el: video, plugins: [
 
 //cuando se de click en el video, ejecutaremos la función que alterna entre play y pause
 boton.onclick = () => player.togglePlay()
-//boton_muted.onclick = () => player.toggleMute()
+
 boton_muted.onclick = () => {
 
     player.media.muted ? player.unmute() : player.mute()

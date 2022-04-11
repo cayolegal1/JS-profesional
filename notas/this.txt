@@ -1,0 +1,123 @@
+This
+‌
+
+Para empezar con esta parte tenemos que comentar el plugins AutoPlay para que no nos moleste.
+
+‌
+
+Vamos a crear un nuevo archivo en nuestra carpetas de ejercicios para aprender a usar this.
+
+‌
+
+¿Qué es this?
+‌
+
+Es un concepto que tienen muchos lenguajes de programación, sobre todo aquellos orientados a objetos. En Java, por ejemplo, this se refiere a la instancia de ese objeto , podemos escribir this.name. En JavaScript esto también es cierto pero existen contextos que cambian a esta propiedad del lenguaje. Veamos una de ellas, el Global Scope.
+
+‌
+
+This en Global Scope
+‌
+
+Si usamos el siguiente código: concole.log(this: ${this}) nos dirá que this es un objeto Window. Siempre que usemos this de forma global el browser lo va a asignar a Window.
+
+‌
+
+Dentro de una función
+‌
+
+Si usamos this dentro de una función con el siguiente código:
+
+function whoIsThis() {
+            return this
+        }
+console.log(`whoIsThis: ${whoIsThis()}`)
+‌
+
+Nos arrojará que this sigue siendo el objeto window. Esto sucede por que estamos ejecutando la función directamente, no está dentro de nada, simplemente cuando está sola el this será window. Esto pasa por defecto, excepto cuando usamos el 'use strict'.
+
+‌
+
+Usando el modo estricto
+‌
+
+Ahora lo probaremos usando el modo estricto de JavaScript.
+
+'use strict'
+function whoIsThisStrict() {
+    return this
+}
+console.log(`whoIsThisStrict: ${whoIsThisStrict()}`)
+‌
+
+Si usamos el modo estricto nos arrojará que this es indefinido, undefined. También podemos limitar el uso estricto para que funcione nada más dentro de la función.
+
+function whoIsThisStrict() {
+    'use strict'
+    return this
+}
+console.log(`whoIsThisStrict: ${whoIsThisStrict()}`)
+‌
+
+Acá sigue siendo undefined pero limitado dentro de la función.
+
+‌
+
+This en un objeto
+‌
+
+This se refiere a un objeto. Ese objeto es el que actualmente está ejecutando un pedazo de código.
+
+‌
+
+Hasta ahora lo hemos llamado directamente, ¿pero qué pasa si esta función estuviera metida dentro de un objeto? Este objeto es el que va a ejecutar nuestra función, por ende será nuestro this.
+
+const person = {
+        name: "César",
+        saludar: function() {
+          console.log(`Hola soy ${this.name}`);
+        }
+      };
+person.saludar();
+‌
+
+Cuando llamamos a this en la función saludar hace referencia al objeto person que cuenta con su propiedad name.
+
+‌
+
+This cuando sacamos una función de un objeto
+‌
+
+Ahora, si sacamos la función saludar y la ejecutamos en una constante que se llame acción, el this representará otra cosa.
+
+const accion = person.saludar; 
+accion();
+‌
+
+Acá el navegador nos arrojará un error ya que no se puede leer a this.name por que no existen en el contesto global.
+
+‌
+
+This en el contexto de una clase
+‌
+
+Las clases no existen en JavaScript. No son iguales a las clases de otros lenguajes de programación. Es una buena forma de entenderlo si le llamamos clases por la funcionalidad que tienen, pero más adelante se explicará mejor este tema de herencia prototipal.
+
+function human(name){
+          this.name = name
+      }
+human.prototype.saludar = function() {
+          console.log(`Hola me llamo ${this.name}`)
+      }
+const cesar = new human('César')
+cesar.saludar()
+‌
+Cuando llamamos a this se refiere a la instancia cesar, esto es importante saberlo ya que cuando asignamos this.name = name lo hacemos sobre la instancia cesar no en el prototipo o clase human. Para poder usar this tenemos que hacer una instancia de la clase usando new y pasando los valores que queramos.
+
+Según MDN, “En general, el valor de this está determinado por cómo se invoca a la función. No puede ser establecida mediante una asignación en tiempo de ejecución, y puede ser diferente cada vez que la función es invocada.”
+.
+Pero yo lo entendí así: This es cómo cuando te conviene contar una historia o no. A veces puedes ponerte en el papel de primera persona, otras en el papel de tercera persona. Todo dependiendo el contexto cómo cuentes la historia.
+.
+Global Scope & Function Scope es cuando se hace referencia a Window.
+This de una Clase, se hace referencia a la instancia generada por el constructor
+This dentro de una función, que está contenida en un objeto, hace referencia a ese objeto
