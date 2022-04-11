@@ -121,3 +121,6 @@ Pero yo lo entendí así: This es cómo cuando te conviene contar una historia o
 Global Scope & Function Scope es cuando se hace referencia a Window.
 This de una Clase, se hace referencia a la instancia generada por el constructor
 This dentro de una función, que está contenida en un objeto, hace referencia a ese objeto
+
+El modo estricto hace mmuchas más cosas que solo limitar el scope;
+https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Modo_estricto

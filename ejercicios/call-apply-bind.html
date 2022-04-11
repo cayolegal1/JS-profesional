@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <a href="/ejercicios/">Go back</a>
+    <h1>Call, apply y bind son métodos para establecer quien es this</h1>
+    <p><em>Abre la consola</em></p>
+
+    <ul>
+        <li><button class="call-to-action">Aprender</button></li>
+        <li><button class="call-to-action">Aprender más</button></li>
+        <li><button class="call-to-action">¡Nunca pares de aprender!</button></li>
+    </ul>
+</body>
+
+<script>
+    
+    //CALL
+
+    //con call podemos establecer quien será el this, por ejemplo en esta función el this sería el window y nos dará undefined porque no hay ninguna variable en el scope global con esos nombres, por lo que crearemos un objeto literal con esos atributos y usaremos call para asignar el this a ese objeto
+    
+    //establecer this usando call
+
+    function saludar(){
+
+        console.log(`Hola! Mi nombre es ${this.name} ${this.apellido}`)
+    }
+
+    cayo = {
+
+        name: "Cayo",
+        apellido: "Legal"
+    }
+
+    saludar.call(cayo) //Hola! Mi nombre es Cayo Legal
+
+
+    //pero cuando en el objeto o función hay parámetros es un poquito diferente, lo único que cambia es que primero pondremos el objeto al cual queremos asignar this, y luego los parámetros
+    
+    //establecer this usando call de función con parámetros
+
+    function darInfoSobreLaCorrida(direccion, metros) {
+
+        console.log(`Hola! soy ${this.name} y camine ${metros} metros hacia el ${direccion}`)
+    }
+
+    darInfoSobreLaCorrida.call(cayo, "norte", 100) //Hola! soy Cayo y camine 100 metros hacia el norte
+
+    //APPLY
+    //apply es un poco diferente a call en este sentido de funciones con parámetros, lo único que cambia es que en vez de pasar parámetro por parámetro luego del this, enviaremos un array en el orden de los parámetros requeridos
+
+    //establecer this usando apply de función con parámetros
+    function darInfoSobreLaCena(platos, comida) {
+        
+        console.log(`Hola! soy ${this.name} y hice ${platos} platos de ${comida}`)
+    }
+    
+    raquel = {
+        
+        name: "Raquel"
+    }
+    
+    darInfoSobreLaCena.apply(raquel, [4, "arroz"]) //Hola! soy Raquel y hice 4 platos de arroz
+    
+    //cuando usar apply en vez de call: 
+    //en el caso de que tengamos una función con muchos parámetros, podemos hacer una lista de esos parámetros en una variable y luego pasar el arreglo para que lea los parámetros. Sin embargo con call, podemos hacer las funciones que tengan pocos parámetros, por ejemplo darInfoSobreLaCorrida tiene solo 2, entonces no tendrá sentido hacer un arreglo de dos valores, pero cuando ya va subiendo de 5 valores para arriba la sintaxis quedaría más linda con apply, ya que podemos pasar un arreglo simplemente
+
+    /* 
+    Call: comma
+    Apply: arreglo
+    */
+    
+
+    //BIND 
+    //bind hace lo mismo que call y apply, reemplaza el this en las funciones, ahora bien, se diferencia de estos a la hora de ejecutar dicha función. Lo primero que debemos hacer es crear una variable en donde vamos a poner el bind de la función, en este caso, saludo.bind, que esta en RiquelmeSaluda, si ejecutamos saludo.bind(riquelme) la función no se ejecutará, lo que debemos hacer luego es que no vamos a ejecutar saludo(), sino RiquelmeSaluda() porque lo que bind hace es crear una nueva función pero, que retorna el mismo output que la función invocadora, solo que lo ejecutaremos con otro nombre y ese nombre es la variable donde guardamos dicha cosa.
+    function saludo(){
+
+        console.log(`Hola soy ${this.name}`)
+    }
+
+    const riquelme = {
+
+        name: 'Juan Román'
+    }
+
+    const RiquelmeSaluda = saludo.bind(riquelme)
+    RiquelmeSaluda()
+
+    //Ahora vamos a ver cómo hacemos para pasar más parámetros a esta función, queremos usar la opción de caminar.
+
+    const daniel = {
+
+        name: "Daniel"
+    }
+    const danielCamina = darInfoSobreLaCorrida.bind(daniel);
+    danielCamina(200, "oeste");
+
+    //Con esto ya tendremos nuestro: //Daniel Sánchez caminó 200 hacia el oeste.
+
+
+    //También podemos pasar un parámetro cuando llamamos con bind y así establecer uno ya predefinido y el otro lo pasamos cuando ejecutamos.
+
+    const danielCaminaOeste = darInfoSobreLaCorrida.bind(daniel, 200); 
+    danielCaminaOeste("oeste"); 
+
+    //cuando usar cada uno o como usar 
+
+    // Aveces tenemos objetos que se parecen a otros. Cuando llamamos a varios elemento usando el getElementByClassName nos trae un Nodelist, es muy parecido al Array pero no trae todos los métodos, como por ejemplo el foreach. Usemos el siguiente código:
+
+    // <u>
+    //     <li><button class="call-to-action">Aprender</button></li>
+    //     <li><button class="call-to-action">Aprender más</button></li>
+    //     <li><button class="call-to-action">¡Nunca pares de aprender!</button></li>
+    // </u>
+
+    // Usaremos estos botones para probar el foreach. Vamos a darle funcionalidad. Traeremos estos botones con getElemenetByClassName y que cuando le demos click a cada uno de estos botones abra una ventana que diga ‘Nunca pares de aprender’.
+
+    const buttons = document.getElementsByClassName("call-to-action");
+      buttons.forEach(element => {
+          element.onclick = ()=> {
+              alert('Nunca pares de aprender')  
+          }
+      });
+
+    // Nos va a decir que buttons no es una función. Esto pasa porque buttons es un Nodelist o un HTMLCollection. Se parecen a los arreglos pero no del todo, por lo menos tienen la propiedad lenght que nos puede servir para hacer el trabajo que queremos. Vamos a llamar el foreach a través del Array y le asignaremos el contexto de buttons con call.
+
+    Array.prototype.forEach.call(buttons, element => {
+        element.onclick = () => alert("Nunca pares de aprender");
+      });
+
+    // De esta forma el foreach entenderá a buttons como el contexto y lo usará como el elemento que iterará cada vez que se le dé click.
+</script>
+</html>

@@ -1,0 +1,155 @@
+Los métodos call, apply y bind
+‌
+
+Es cierto que this no es un valor que podemos asignar directamente, pero sí existen unos métodos que son parte del prototipo de function, se llaman: call, apply y bing. Estos nos ayudarán a establecer this en el contexto de una llamada a una función.
+
+‌
+
+Crearemos un nuevo archivo en la carpeta de ejercicios para aprender más sobre esto.
+
+‌
+
+Call
+‌
+
+Para empezar crearemos una función.
+
+function saludar() {
+        console.log(`Hola, me llamo ${this.name} ${this.apellido}`);
+      }
+‌
+
+En este caso no tenemos la función dentro de algún objeto o clase y sin embargo estamos utilizando this. Con la ayuda de Call vamos a establecer cual va a ser el this. Para esto crearemos un objeto.
+
+const augusto = {
+          name: 'Augusto',
+          apellido: 'Barco'
+      }
+‌
+
+Al tener el objeto vamos a llamar a saludar pero mediante call. Todas las funciones tienen los tres métodos antes mencionados, son tres funciones que ya vienen empaquetadas.
+
+saludar.call(augusto)
+‌
+
+Con esto establecemos que this va a ser el objeto augusto. También podemos pasar parámetros aparte del contexto que ya le podemos dar con el call. Por ejemplo:
+
+function caminar(metros, direccion) {
+        console.log(
+          `${this.name} ${this.apellido} caminó ${metros} hacia el ${direccion}`
+        );
+      }
+
+      caminar.call(augusto, 1000, "sur");
+‌
+
+Esto nos dará como resultado: //Augusto Barco caminó 1000 hacia el sur. Aparte del contexto que le pasamos le mandamos dos argumentos.
+
+‌
+
+Apply
+‌
+
+Esta hace la misma funcionalidad de call, pero sus argumentos los pasamos de una forma ligeramente diferente.
+
+caminar.apply(augusto, [800, "sureste"]);
+‌
+
+Acá le pasamos los parámetros extras como si fueran un arreglo. Eso nos sirve cuando le tenemos que pasar una lista larga de parámetros a nuestra función, podremos manejar mejor esto usando apply. También le podemos pasar una instancia de un arreglo.
+
+const parametros = [800, "sureste"];
+caminar.apply(augusto, parametros);
+‌
+
+Igual nos dará el mismo resultado.
+
+‌
+
+Truco para distinguirlos
+‌
+
+Podemos usar las iniciales de cada tipo de asignador de this. Ejemplo:
+
+‌
+
+Call: c de comas, esto por que le pasamos todos los valores separados por comas.
+
+Apply: a de arreglo, acá le pasamos todos los parámetros por arreglos.
+
+‌
+
+Bind
+‌
+
+A diferencia de los dos anteriores que vimos, bind no va a llamar a la función automáticamente. Lo que va a hacer es construir una nueva función con el this integrado, cuando la llamemos va a funcionar.
+
+const daniel = {
+        name: "Daniel",
+        apellido: "Sánchez"
+      };
+      saludar.bind(daniel);
+‌
+
+Si hacemos esto la función no se va a llamar, por esto tenemos que meterla en una constante y ejecutarla luego.
+
+const saludarConDaniel = saludar.bind(daniel); 
+      saludarConDaniel();
+‌
+
+Ahora vamos a ver cómo hacemos para pasar más parámetros a esta función, queremos usar la opción de caminar.
+
+const danielCamina = caminar.bind(daniel);
+  danielCamina(200, "oeste");
+‌
+
+Con esto ya tendremos nuestro: //Daniel Sánchez caminó 200 hacia el oeste.
+
+‌
+
+También podemos pasar un parámetro cuando llamamos con bind y así establecer uno ya predefinido y el otro lo pasamos cuando ejecutamos.
+
+const danielCamina = caminar.bind(daniel, 200); 
+  danielCamina("oeste"); 
+‌
+
+Nos dará el mismo resultado pero guardando ya un parámetro que es la distancia. A esta técnica se le llama Function currying.
+
+‌
+
+Conclusión
+‌
+
+Tenemos varias formas de establecer el valor de this, con los tres métodos que vimos. Cada uno tiene su forma de hacerlo. Con call y apply establecen el this y llaman de una vez a la función. Con bind se establece el contexto pero luego hay que ejecutarla como si fuera una nueva función que hay que guardar en una constante.
+
+----ARROW FUNCTIONS AND THIS----
+Una expresión de función flecha es una alternativa compacta a una expresión de función tradicional, pero es limitada y no se puede utilizar en todas las situaciones.
+
+Diferencias y limitaciones:
+
+No tiene sus propios enlaces a this o super y no se debe usar como métodos.
+No tiene argumentos o palabras clave new.target.
+No apta para los métodos call, apply y bind, que generalmente se basan en establecer un ámbito o alcance
+No se puede utilizar como constructor.
+No se puede utilizar yield dentro de su cuerpo.
+
+Las arrow function son un tema distinto cuando hablamos del this y el contexto , el this es asignado dependiendo del tipo de enlazamiento o binding que tenga la funcion , en este caso las arrow functions son diferentes que las normales
+
+Las normales tienen un binding implicito
+
+const person = {
+	name: 'Nilson',
+	greeting: function() {
+		console.log('Hey Im' + this.name)
+	}
+}
+
+person.greeting()
+//El this en este caso sera el objeto antes del punto o el objeto que esta llamando la funcion
+por tanto en ellas si funcionan los metodos call, apply y bind , pero las arrow function tienen un lexical binding que es diferente y en ellas no causa ningun efecto estos metodos , los puedes poner sin errores pero no haran nada
+
+Te dejo este Video para que puedas entender los bindings y el this en javascrip
+
+video: https://www.youtube.com/watch?v=bS71_W_BDFE&t=1528s
+
+Siempre es buena práctica ver quien es el this en las funciones
+‌
