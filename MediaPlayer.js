@@ -1,10 +1,21 @@
-//realizar config.el nos obliga que al instanciar estemos pasando un objeto, porque estamos diciendole a la 
-//funcion que el media, va a ser igual al elemento de un objeto  
+//basicamente con los plugins, estamos diciendole que es opcional, porque si nos pasan plugins pues bien, tendremos 
+//plugins, si no nos pasan ningun plugin y omiten el envio, pues this.plugins será un array vacío
 function MediaPlayer(config) {
 
-    this.media = config.el
+    this.media = config.el;
+    this.plugins = config.plugins || []
+    this._initplugins() //al instanciar el método, se ejecutará este atributo que es un prototipo, como lo def abajo
 }
 
+
+//método prototipo para inicializar los plugins
+MediaPlayer.prototype._initplugins = function(){
+
+    this.plugins.forEach( plugin => {
+
+        plugin.run(this)
+    })
+}
 
 //lo que hacemos aquí, básicamente es que en la funcion madre, estamos declarando que el parámetro del objeto que se pase en las instancias se guardará en el atributo media, y en este caso estamos instanciando con la etiqueta video de HTML que tiene consigo un método o una API para reproducir los vídeos que es el método play, 
 //la etiqueta video tiene varios metodos o atributos consigo para controlar el video pasado por HTML
@@ -36,4 +47,29 @@ if(this.media.paused) {
     }
 }
 
+
+
+MediaPlayer.prototype.mute = function(){
+
+    this.media.muted = true
+}
+
+
+MediaPlayer.prototype.unmute = function() {
+
+    this.media.muted = false
+}
+
+
+
+MediaPlayer.prototype.toggleMute = function() {
+
+    if(this.media.muted) {
+
+        this.media.unmute()
+    } else {
+
+        this.media.mute()
+    }
+}
 export default MediaPlayer;
