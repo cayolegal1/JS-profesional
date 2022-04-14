@@ -11,10 +11,33 @@ function MediaPlayer(config) {
 //método prototipo para inicializar los plugins
 MediaPlayer.prototype._initplugins = function(){
 
+
+    const player = {
+
+        play: () => this.play(),
+        pause: () => this.pause(),
+        media: this.media,
+
+        //nos retorna el valor de mute
+        get muted(){
+
+            return this.media.muted
+        }, 
+
+        //asignamos el mute
+        set muted(value){
+
+            this.media.muted = value
+        }
+
+    }
     this.plugins.forEach( plugin => {
 
-        plugin.run(this)
+        plugin.run(player)
     })
+
+    //al crear el objeto player y pasarle como parametro a run, estamos limitando el acceso de los 
+    //plugins al video
 }
 
 //lo que hacemos aquí, básicamente es que en la funcion madre, estamos declarando que el parámetro del objeto que se pase en las instancias se guardará en el atributo media, y en este caso estamos instanciando con la etiqueta video de HTML que tiene consigo un método o una API para reproducir los vídeos que es el método play, 
