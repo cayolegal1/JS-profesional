@@ -9,38 +9,65 @@
     <img 
         id="huge-image" 
         height="400"
-    />
+    /> <br><br>
     <button id="load">Load HUGE Image</button>
     <button id="stop" disabled>Stop Fetching</button>
     
     <script>
-        const url = 
-        'https://images.pexels.com/photos/974470/nature-stars-milky-way-galaxy-974470.jpeg?q=100';
-      const img = document.getElementById('huge-image');
-      const loadButton = document.getElementById('load');
-      const stopButton = document.getElementById('stop');
 
+    //fetch tenia un problema antes, al salir una petición hacia una API era imposible cancelar dicha petición, por lo que si haciamos una petición que no queriamos y queriamos seguir navegando normalmente habría que esperar hasta que dicha petición se concluyera para luego seguir navegando. Para solucionar eso llegó AbortController, al realizar la petición con fetch asíncronamente, y al traer los datos de la url, existe un método llamado "blob()" que convierte el response del fetch en código binario, pero en este caso estamos usando una imagen como response, por lo que no podemos pasarle a la función un código binario sino convertir ese codigo a URL. Para lograr eso, todos los navegadores tienen incorporado un método llamado URL.createObjectURL() y lo que hay que pasarle es el código binario o el blob que hicimos del fetch a la url de la imagen, y el navegador se encargará de convertir el blob o código binario a URL, y es esa URL la que utilizaremos para asignarle a la imagen. 
 
-      function startLoading() {
+    //Luego por si la imagen tarde mucho implementaremos lo que viene siendo el tema de clase, cancelar dicha petición mientras esta tarde mucho, para eso pasaremos un objeto de configuración en el fetch a la url, y pasaremos un signal, de donde vendrá dicho signal? Aquí es donde entra AbortController, que nos dará los controles para poder cancelar una petición. AbortController es una clase, por lo que hay que instanciarla. AbortController tiene señales, que es la que nuestro atributo del objeto de configuración signal necesita. Luego cuando querramos detener la ejecución realmente, con el boton designado para eso, usamos el método abort de AbortController. Cabe destacar que nuestro AbortController debe tener un scope global para un mejor uso, ya que cuando lo instanciamos estamos usando en la función de cargar la imagen, por lo que esa instancia debe tener scope global para poder acceder también al botón disparador del cancelamiento de la petición, y para realizar el cancelador simplemente tenemos que ejecutar el método abort() del AbortController. Más info sobre Abort Controller: https://developer.mozilla.org/en-US/docs/Web/API/AbortController/abort
+    //Todo esta funcionalidad puede ser muy útil para la carga de las Single Page Applications 
+    
+    //OBS: Para usar la funcionalidad del navegador del network y simular una conexión lenta, hay que darle a disable caché :D
+
+    const url = 
+    'https://images.pexels.com/photos/974470/nature-stars-milky-way-galaxy-974470.jpeg?q=100';
+    const img = document.getElementById('huge-image');
+    const loadButton = document.getElementById('load');
+    const stopButton = document.getElementById('stop');
+    let controller
+
+    function startLoading() {
         loadButton.disabled = true;
         loadButton.innerText = 'Loading...';
         stopButton.disabled = false;
-      }
-      function stopLoading() {
+    }
+    function stopLoading() {
         loadButton.disabled = false;
         loadButton.innerText = 'Load HUGE Image';
         stopButton.disabled = true;
-      }
+    }
 
-      loadButton.onclick = async function() {
-        startLoading();
-        stopLoading();
-      };
+    //loadButton.addEventListener('click', startLoading)
 
-      stopButton.onclick = function() {
+    loadButton.onclick = async function(){
+
+        startLoading()
+
+        controller = new AbortController()
+        
+        try{
+
+            const response = await fetch(url, {signal: controller.signal})
+            const blob = await response.blob()
+            const ImgUrl = URL.createObjectURL(blob)
+            img.src = ImgUrl
+        } catch(error){
+            
+            console.error(error.message)
+        }
+        
+        stopLoading()
+    }
+
+    stopButton.onclick = function() {
+
+        controller.abort()
         stopLoading();
-      };
-      
+    };
+
     </script>
   </body>
 </html>

@@ -1,0 +1,78 @@
+
+
+Los BLOB (Binary Large Objects, objetos binarios grandes) son elementos utilizados en las bases de datos para almacenar datos de gran tamaño que cambian de forma dinámica. No todos los Sistemas Gestores de Bases de Datos son compatibles con los BLOB.
+
+Generalmente, estos datos son imágenes, archivos de sonido y otros objetos multimedia; a veces se almacenan como códigos de binarios BLOB
+
+Para que usar blob no entiendo
+
+Se convierte a un archivo BLOB cuando queremos que el navegador pueda desplegar un archivo ya sea imagen o video como vista previa.
+
+Por ejemplo imaginemos que deseas subir un video, el navegador entenderá que es un archivo tipo File pero no podrá manipularlo como tal para mostrarlo en el navegador hasta que se haga la conversión a tipo Blob.
+
+Referencia: https://medium.com/javascript-in-plain-english/javascript-blob-why-is-it-useful-20c372dfca00
+
+
+
+porque la imagen viene en un .blob?
+
+en el minuto 4:10 el estable que quiere la imagen en formato .blob
+blob es una formato binario que normalmente sirve para tranformar imagenes en binario para poder guardarlas en la base de datos
+
+No estoy seguro, lo estuve intentando sin hacer blob a la imagen y aun se puede trabajar asi, lo que si es que cuando abres el inspector de elementos sin usar blob te sale la liga directa a la imagen en internet, si lo usas como hizo el profe obtienes una ruta local. Puede que sea para ambitos de seguridad.
+
+
+
+
+que es el .createObjectURL(blob) y el .signal??
+
+para signal
+primero que nada controller es un objeto tipo AbortController, por lo que el atributo controller.signal ya existe por defecto,
+signal es un atributo que funciona como receptor del método controller.abort().
+Puedes hacer un console.log(controller) en el ejemplo para ver todos los metodos y atributos que tiene.
+
+Al correr contoller.abort() obtenemos un evento que activa controler.signal. Lo puedes ver como un botón que enciende una luz, o de nuevo como un EventListener.
+
+var controller = new AbortController();
+varsignal= controller.signal;
+
+botonFetch.addEventListener('click', fetchVideo);
+botonCancel.addEventListener('click', controller.abort())
+
+asyncfunctionfetchVideo() {
+  const fetched = await fetch(url, {signal})
+  fetched 
+    ? alert('obtuvimos algo')
+    : alert('se cancelo o lo cancelaron')
+
+URL.createObjectURL(blob) genera una url dinamica, que cambia, y digital, es decir que no existe en realidad en tu repositorio, pero hay manera de que si 👀, para lo que exista en la variable blob, en el caso de este proyecto existe un archivo binario. Si abres tu inspector de elementos y revisas el tag img verás que esta especificada una ruta con el archivo que en realidad no existe en tu proyecto, pero está ahi en el servidor que creaste con live-server🤯.
+
+El método estático URL.createObjectURL() crea un DOMString que contiene una URL que representa al objeto pasado como parámetro. La vida de la URL está ligado al document de la ventana en la que fue creada.
+
+createObjectURL() convierte el blob en un data url que es una url con los datos en base64. y el .signal del controller es el que informa al fetch que alguien ejecutó el abort
+
+
+Saludos! Tengo una pregunta. Por qué se tiene acceso al método .abort() del controller desde un scope diferente al que fue instanciado? Por qué funciona? Porqué no genera error? Muchas gracias!
+
+Hola!
+porque está habilitado en el scope global del navegador.
+
+
+
+
+tengo una pregunta, abortController.abort() aborta todos los fetch?
+absolutamente todos?
+
+Pienso que sería a los fetch donde pasemos el singal, si queremos relacionar mas de una petición, pues pasamos ese mismo signal a esas peticiones que deseamos cancelar en ese evento.
+
+
+---EL MEJOR---
+
+No me queda claro el uso que le da al objeto de configuración {signal: contoller.signal}, alguien me puede explicar que es lo que básicamente?
+
+Cuando haces una peticion fetch, el primer argumento es la url, y el segundo es un objeto de configuracion donde puedes pasar datos como : el metodo que vas a utilizar, que por defecto es GET, las headers de la peticion, el body de la peticion por ejemplo si vas a hacer un POST, por ahi mandas los datos, y todo esto en forma de objeto.
+
+Tambien mandas la signal del AbortController, el cual sirve para controlar el abortcontroller dentro de ésta peticion, al momento de ejecutar:
+
+controller.abort()
+se cancelaran las peticiones fetch a las que se le halla pasado la señal por parametro.
