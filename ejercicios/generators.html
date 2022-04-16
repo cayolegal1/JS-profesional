@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <a href="/ejercicios/">Go back</a>
+    <p><em>Abre la consola</em></p>
+</body>
+<script>
+      // Los generadores son funciones de las que se puede salir y volver a entrar.
+      // Su contexto (asociación de variables) será conservado entre las reentradas.
+      // Cada vez que llamamos next, la ejecución del generador va a continuar hasta el proximo yield
+
+      //Al declarar la keyword function seguido de un * asterisco, luego el nombre que queramos darle a la función, estamos declarando que esa función sera una función generadora, esta función como dice más arriba puede salir de la función y volver a entrar, es decir, ejecutar hasta una cierta parte la función, luego seguir con el código y luego volver a ejecutar lo que falta de la función, eso lo hacemos guardando la función en una variable y ejecutando un método de los generadores que se llama next, eso lo que hará, será entrar en la función, entrar en el yield correspondiente, con o sin un valor, y salir de vuelta hasta el siguiente yield, luego cuando volvamos a llamar a next, volverá a entrar a la función, ejecutará todo el yield hasta el siguiente, puede haber infinitos yields, esto resulta muy útil para grandes volumenes de datos que querramos pasar los valores cada tanto y parcialmente. Lo interesante es que si ejecutamos un yield con un valor, al volver a llamar a next y pasar al siguiente este recordará el valor anterior, por lo que podemos hasta hacer un bucle infinito con while(true) y este funcionaría sin dramas porque no se crasheara la compu, porque saldrá de la función y luego volverá a entrar una vez lo llamemos :D
+
+      function* simpleGenerator() {
+        console.log('GENERATOR START');
+        yield 1;
+        yield 2;
+        yield 3;
+        console.log('GENERATOR END');
+      }
+
+      // const gen = simpleGenerator();
+
+      // Podemos hacer generadores infinitos.
+      function* idMaker() {
+        let id = 1;
+        while (true) {
+          yield id;
+          id = id + 1;
+        }
+      }
+
+      // Cuando llamamos next también podemos pasar valores que la función recibe.
+      function* idMakerWithReset() {
+        let id = 1;
+        let reset;
+        while (true) {
+          reset = yield id;
+          if (reset) {
+            id = 1;
+          } else {
+            id = id + 1;
+          }
+        }
+      }
+
+      // Ahora hagamos un ejemplo un poco más complejo: la secuencia fibonacci
+      function* fibonacci() {
+        let a = 1;
+        let b = 1;
+        while (true) {
+          const nextNumber = a + b;
+          a = b;
+          b = nextNumber;
+          yield nextNumber;
+        }
+      }
+</script>
+</html>

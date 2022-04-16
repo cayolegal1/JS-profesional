@@ -11,7 +11,10 @@ function MediaPlayer(config) {
 //método prototipo para inicializar los plugins
 MediaPlayer.prototype._initplugins = function(){
 
-
+    //creamos este objeto para que los plugins tengan acceso limitado al MediaPlayer, ya que estos tenian 
+    //total acceso a este y eso no es bueno, lo que estamos haciendo es que le pasamos como parámetro al metodo 
+    //run el objeto player así que Con el getter le das un nivel de acceso de lectura a la propiedad “media.muted” para que el intermediario pueda saber que valor tiene, pero no lo puede modificar y Con el setter le das un nivel de acceso de escritura a la propiedad “media.muted” para que el intermediario pueda modificar su valor y mutear o reproducir el sonido del MediaPlayer.
+    
     const player = {
 
         play: () => this.play(),

@@ -1,0 +1,101 @@
+Generador
+El objecto Generador es retornado por generator function y conforma tanto un protocolo iterable como un protocolo iterador.
+
+Sintaxis
+function* gen() { 
+  yield 1;
+  yield 2;
+  yield 3;
+}
+
+var g = gen(); // "Generator { }"
+Métodos
+Generator.prototype.next()
+
+Retorna el valor ofecido por la expresión yield
+
+Generator.prototype.return()
+
+Retorna el valor dado y finaliza el generador.
+
+Generator.prototype.throw()
+
+Lanzá un error al generador
+
+Ejemplo
+Un iterador infinito
+
+function* idMaker() {
+	    var index = 0;
+	    while(true)
+	        yield index++;
+	}
+
+	var gen = idMaker(); // "Generator { }"
+
+	console.log(gen.next().value); // 0
+	console.log(gen.next().value); // 1
+	console.log(gen.next().value); // 2
+	// ...
+
+
+
+
+
+Generators
+Los generators son funciones especiales, ya que podemos comenzar su ejecución, detenerla, el archivo de Js se sigue ejecutando, luego podemos regresar a está función y terminar de ejecutarla.
+
+Lo interesante es que los generators se recuerdan de su contexto cuando volvemos a retomar su ejecución.
+
+Para crear un generators utilizamos * después de poner la palabra reservada function
+
+function* name(params) {
+Con la palabra reservada yield el generator se detiene la ejecución de esa función y sigue con lo demás. También a través del yield retornamos el valor que queremos obtener de la función
+
+     function* simpleGenerator() {
+        console.log("Generador Start")
+        yield 1
+        yield 2
+        console.log("Generador End")
+      }
+const gen = simpleGenerator()
+Con el método .next() ejecutamos el generador.
+
+gen.next()
+A través de .next() también podemos pasarle un valor al generador. Tendremos que pasarle true y este va a reestablecer el valor de reset
+
+function* idMakerWithReset() {
+        let id = 1
+        let reset
+        while(true) {
+          reset = yield id
+          if (reset) {
+            id = 1
+          } else {
+            id += 1
+          }
+        }
+      }
+
+      const idMR = idMakerWithReset()
+
+idMR.next(true)
+
+
+
+
+
+
+No entendí por qué utilizó true en gen.next(true) ? Para qué sirve y cómo funciona?
+
+Hola hyper, cuando tenemos un generador y llamamos a la función next pasandole un parametro lo que ocurre es que dentro de la función generadora se retoma el programa y ese valor se guarda en el resultado de yield . Veamoslo con el ejemplo que hicimos en clases:
+
+Al llamar gen.next pasandole el parametro
+
+gen.next(true);
+lo que ocurre es que al retomar el programa en esta linea
+
+reset = yield id;
+//Representaria esto 
+reset = true;
+El parametro de next se guarda en reset al retomar el programa.
