@@ -3,9 +3,11 @@ class AutoPause {
     constructor(){
 
         this.threshold = 0.25
+        this.pausedByVisibility = false;
 
-        //apuntamos a que el this del metodo de nuestra clase AutoPause apunte hacia el mismo método
+        //apuntamos a que el this del metodo de nuestra clase AutoPause apunte hacia el mismo método o clase
         this.handleIntersection = this.handleIntersection.bind(this)
+        this.handleVisibilityChange = this.handleVisibilityChange.bind(this)
     } 
 
     run(player){
@@ -21,10 +23,13 @@ class AutoPause {
         })
 
         observer.observe(this.player.media)
+
+        //evento que escucha si nos movemos de pestaña o de ventana
+        document.addEventListener('visibilitychange', this.handleVisibilityChange)
     }
 
 
-    //callback
+    //callback Intersection Obs
     handleIntersection(entries) {  
 
 
@@ -45,6 +50,32 @@ class AutoPause {
             this.player.pause()
 
         }
+     }
+
+     handleVisibilityChange() {
+
+        //evalua el estado de la pestaña de nuestra app, si estamos en ella, quiere decir 'visible'
+        const isVisible = document.visibilityState === 'visible'
+
+        //si estamos en la pestaña dale play
+        if(isVisible) {
+            if (this.pausedByVisibility){
+
+                this.player.play()
+
+            }
+            
+        } else {
+            if (!this.player.media.paused) {
+
+              this.player.pause();
+              this.pausedByVisibility = true;
+
+            } else {
+              this.pausedByVisibility = false;
+              
+            }
+          }
      }
 } 
 
