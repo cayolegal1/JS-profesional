@@ -54,6 +54,7 @@
             const blob = await response.blob()
             const ImgUrl = URL.createObjectURL(blob)
             img.src = ImgUrl
+            
         } catch(error){
             
             console.error(error.message)
