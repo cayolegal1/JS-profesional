@@ -73,11 +73,12 @@ class AutoPause {
 
             } else {
               this.pausedByVisibility = false;
-              
+
             }
           }
      }
 } 
+
 
 // observe: es un metodo de la ‘clase’ intersectionObjerver que nos permite aplicar nuestro objeto configurado a un elemento. Entonces todo lo que configuramos al asignar new IntersectionObserver lo aplicamos en el elementoAObservar.
 // Otra manera de explicarlo sería decir que es como un listener configurado para escuchar el margen observado del elementoAObservar.
@@ -89,6 +90,9 @@ class AutoPause {
 // entries: es el objeto recibido cada que el elementoAObservar es observado, puedes hacerle un console.log(entries) y veras que dentro contiene dos objetos, bno, solo el primero vienen los parametros de observación, es por esto que en la segunda linea solo obtenemos este primer objeto con const entry = entries[0].
 
 // intersectionRatio: es uno de los parametros obtenidos en el objeto al interceptarlo, tomese interceptar como activar el ‘listener’ o el ‘metodo observe’. Este nos dice qué porcentaje del elemento está a la vista, por lo que pormedio de el podemos verificar si el elementoAObservar está visible o no. 🤯
+
+
+//El visibilityChange forma parte del API del DOM llamado Page Visibility y nos deja saber si el elemento es visible, pude ser usado para ejecutar una acción cuando cambiamos de pestaña. Así podemos ahorrar batería y mejorar la UX.
 
 
 export default AutoPause;

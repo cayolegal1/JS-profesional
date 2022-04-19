@@ -21,4 +21,16 @@ boton_muted.onclick = () => {
     player.media.muted ? player.unmute() : player.mute()
 }
 
+//service worker 
+
+
+//si hay un service worker en el navegador o lo acepta
+if('serviceWorker' in navigator) {
+
+    //registraremos un archivo en el cual pondremos en marcha el serviceWorker para seguir usando la app en modo offline
+    navigator.serviceWorker.register('/serviceWorker.js')
+
+    .catch(error => console.error(error.message))
+}
+
 
