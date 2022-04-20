@@ -92,3 +92,37 @@ let objeto: object = {
 }
 
 //objeto = 2 //error
+
+
+
+
+//Funciones
+
+function add (a:number, b:number): number {
+    return a + b
+}
+
+const sum = add(5, 8)
+
+function createAdder(a: number): (number) => number {
+    return (b: number) => b + a
+}
+
+const addFour = createAdder(4)
+const fourPlus6 = addFour(6)
+
+//Si queremos que un parámetro sea opcional hay que ponerle un ? antes.
+
+function fullName(firstName: string, lastName?: string): string {
+    return `${firstName} ${lastName}`
+}
+
+const PERSON = fullName('José')
+
+//Para creador un valor por default, lo hacemos
+
+function NameFull(firstName: string, lastName: string = 'Perez'): string {
+    return `${firstName} ${lastName}`
+}
+
+const person = fullName('José')
