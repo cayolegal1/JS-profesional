@@ -1,0 +1,78 @@
+Interfaces
+Introducción
+Uno de los principios centrales de TypeScript es que la verificación de tipos se centra en la forma que tienen los valores. Esto a veces se llama “tipificación de pato” o “subtipo estructural”. En TypeScript, las interfaces cumplen la función de nombrar estos tipos y son una forma poderosa de definir contratos dentro de su código, así como contratos con código fuera de su proyecto.
+
+Nuestra primera interfaz
+La forma más fácil de ver cómo funcionan las interfaces es comenzar con un ejemplo simple:
+
+function printLabel(labeledObj: { label: string }) {
+    console.log(labeledObj.label);
+}
+
+let myObj = {size: 10, label: "Size 10 Object"};
+printLabel(myObj);
+
+El verificador de tipos verifica la llamada a printLabel. La printLabelfunción tiene un único parámetro que requiere que el objeto pasado tenga una propiedad llamada labelde tipo string. Tenga en cuenta que nuestro objeto en realidad tiene más propiedades que esto, pero el compilador solo verifica que al menos las requeridas estén presentes y coincidan con los tipos requeridos. Hay algunos casos en que TypeScript no es tan indulgente, que cubriremos en un momento.
+
+Podemos escribir el mismo ejemplo nuevamente, esta vez usando una interfaz para describir el requisito de tener la labelpropiedad que es una cadena:
+
+interface LabeledValue {
+    label: string;
+}
+
+function printLabel(labeledObj: LabeledValue) {
+    console.log(labeledObj.label);
+}
+
+let myObj = {size: 10, label: "Size 10 Object"};
+printLabel(myObj);
+
+La interfaz LabeledValuees un nombre que ahora podemos usar para describir el requisito en el ejemplo anterior. Todavía representa tener una sola propiedad llamada labelque es de tipo string. Tenga en cuenta que no tuvimos que decir explícitamente que el objeto que pasamos printLabelimplementa esta interfaz como podríamos tener que hacerlo en otros idiomas. Aquí, lo único que importa es la forma. Si el objeto que pasamos a la función cumple con los requisitos enumerados, entonces está permitido.
+
+Vale la pena señalar que el verificador de tipo no requiere que estas propiedades vengan en ningún tipo de orden, solo que las propiedades que requiere la interfaz están presentes y tienen el tipo requerido.
+
+Propiedades opcionales
+No todas las propiedades de una interfaz pueden ser necesarias. Algunos existen bajo ciertas condiciones o pueden no estar allí en absoluto. Estas propiedades opcionales son populares cuando se crean patrones como “bolsas de opciones” donde se pasa un objeto a una función que solo tiene un par de propiedades rellenadas.
+
+Aquí hay un ejemplo de este patrón:
+
+interface SquareConfig {
+    color?: string;
+    width?: number;
+}
+
+function createSquare(config: SquareConfig): {color: string; area: number} {
+    let newSquare = {color: "white", area: 100};
+    if (config.color) {
+        newSquare.color = config.color;
+    }
+    if (config.width) {
+        newSquare.area = config.width * config.width;
+    }
+    return newSquare;
+}
+
+let mySquare = createSquare({color: "black"});
+
+Las interfaces con propiedades opcionales se escriben de manera similar a otras interfaces, con cada propiedad opcional indicada por un ?al final del nombre de la propiedad en la declaración.
+
+La ventaja de las propiedades opcionales es que puede describir estas propiedades posiblemente disponibles y al mismo tiempo evitar el uso de propiedades que no forman parte de la interfaz. Por ejemplo, si hubiéramos escrito mal el nombre de la colorpropiedad createSquare, obtendríamos un mensaje de error informándonos:
+
+interface SquareConfig {
+    color?: string;
+    width?: number;
+}
+
+function createSquare(config: SquareConfig): { color: string; area: number } {
+    let newSquare = {color: "white", area: 100};
+    if (config.clor) {
+        // Error: Property 'clor' does not exist on type 'SquareConfig'
+        newSquare.color = config.clor;
+    }
+    if (config.width) {
+        newSquare.area = config.width * config.width;
+    }
+    return newSquare;
+}
+
+let mySquare = createSquare({color: "black"});

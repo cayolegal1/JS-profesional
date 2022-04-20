@@ -126,3 +126,48 @@ function NameFull(firstName: string, lastName: string = 'Perez'): string {
 }
 
 const person = fullName('José')
+
+
+//Interfaces
+
+enum Color {
+    Marron = "Marron",
+    Negro = "Negro"
+}
+
+interface Rectangulo {
+
+    ancho: number,
+
+    alto: number
+
+    color?: Color
+}
+
+let rectangulo: Rectangulo = {
+
+    ancho: 4,
+    alto: 5,
+    color: Color.Negro
+}
+
+//si no completamos tal cual esta a interface, en cuanto a sus atributos, dará error, property 'attr' missing in type Reactanculo
+
+// let rect: Rectangulo = {
+
+//     ancho: 4,
+    
+// }
+
+function area(r: Rectangulo):number {
+
+    return r.alto * r.ancho
+}
+
+const areaRect = area(rectangulo)
+
+rectangulo.toString = function () {
+    return this.color ? `Un rectángulo ${this.color}` : `Un rectangulo`
+}
+
+console.log(rectangulo.toString())
