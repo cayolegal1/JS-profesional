@@ -1,0 +1,130 @@
+Tipos básicos
+Boolean
+El tipo de datos más básico es el valor verdadero / falso simple, que JavaScript y TypeScript llaman un booleanvalor.
+
+let isDone: boolean = false;
+Numero
+Como en JavaScript, todos los números en TypeScript son valores de coma flotante. Estos números de coma flotante obtienen el tipo number. Además de los literales hexadecimales y decimales, TypeScript también admite literales binarios y octales introducidos en ECMAScript 2015.
+
+let decimal: number = 6;
+let hex: number = 0xf00d;
+let binary: number = 0b1010;
+let octal: number = 0o744;
+String
+Otra parte fundamental de la creación de programas en JavaScript para páginas web y servidores es trabajar con datos textuales. Como en otros idiomas, usamos el tipo stringpara referirnos a estos tipos de datos textuales. Al igual que JavaScript, TypeScript también utiliza comillas dobles ( ") o comillas simples ( ') para rodear los datos de cadena.
+
+let color: string = "blue";
+color = 'red';
+
+También puede usar cadenas de plantillas , que pueden abarcar varias líneas y tener expresiones incrustadas. Estas cadenas están rodeadas por el carácter backtick / backquote ( `), y las expresiones incrustadas son de la forma ${ expr }.
+
+let fullName: string = `Bob Bobbington`;
+let age: number = 37;
+let sentence: string = `Hello, my name is ${ fullName }.
+
+I'll be ${ age + 1 } years old next month.`;
+
+Esto es equivalente a declarar sentenceasí:
+
+let sentence: string = "Hello, my name is " + fullName + ".\n\n" +
+    "I'll be " + (age + 1) + " years old next month.";
+
+Array
+TypeScript, como JavaScript, le permite trabajar con matrices de valores. Los tipos de matriz se pueden escribir de una de dos maneras. En el primero, usa el tipo de elementos seguido de []para denotar una matriz de ese tipo de elemento:
+
+let list: number[] = [1, 2, 3];
+
+La segunda forma usa un tipo de matriz genérico Array<elemType>:
+
+let list: Array<number> = [1, 2, 3];
+Tuple
+Los tipos de tupla le permiten expresar una matriz con un número fijo de elementos cuyos tipos son conocidos, pero no necesitan ser los mismos. Por ejemplo, es posible que desee representar un valor como un par de ay stringa number:
+
+// Declare a tuple type
+let x: [string, number];
+// Initialize it
+x = ["hello", 10]; // OK
+// Initialize it incorrectly
+x = [10, "hello"]; // Error
+
+Al acceder a un elemento con un índice conocido, se recupera el tipo correcto:
+
+console.log(x[0].substring(1)); // OK
+console.log(x[1].substring(1)); // Error, 'number' does not have 'substring'
+
+El acceso a un elemento fuera del conjunto de índices conocidos falla con un error:
+
+x[3] = "world"; // Error, Property '3' does not exist on type '[string, number]'.
+
+console.log(x[5].toString()); // Error, Property '5' does not exist on type '[string, number]'.
+Enum
+Una adición útil al conjunto estándar de tipos de datos de JavaScript es enum. Como en lenguajes como C #, una enumeración es una forma de dar nombres más amigables a conjuntos de valores numéricos.
+
+enum Color {Red, Green, Blue}
+let c: Color = Color.Green;
+
+Por defecto, las enumeraciones comienzan a numerar a sus miembros a partir de 0. Puede cambiar esto configurando manualmente el valor de uno de sus miembros. Por ejemplo, podemos comenzar el ejemplo anterior en 1lugar de 0:
+
+enum Color {Red = 1, Green, Blue}
+let c: Color = Color.Green;
+
+O, incluso establezca manualmente todos los valores en la enumeración:
+
+enum Color {Red = 1, Green = 2, Blue = 4}
+let c: Color = Color.Green;
+
+Una característica útil de las enumeraciones es que también puede pasar de un valor numérico al nombre de ese valor en la enumeración. Por ejemplo, si tuviéramos el valor 2pero no estuviéramos seguros de a qué se asignó en la Colorenumeración anterior, podríamos buscar el nombre correspondiente:
+
+enum Color {Red = 1, Green, Blue}
+let colorName: string = Color[2];
+
+console.log(colorName); // Displays 'Green' as its value is 2 above
+Any
+Es posible que necesitemos describir el tipo de variables que no sabemos cuando estamos escribiendo una solicitud. Estos valores pueden provenir de contenido dinámico, por ejemplo, del usuario o de una biblioteca de terceros. En estos casos, queremos inhabilitar la verificación de tipos y dejar que los valores pasen por las comprobaciones en tiempo de compilación. Para hacerlo, los etiquetamos con el anytipo:
+
+let notSure: any = 4;
+notSure = "maybe a string instead";
+notSure = false; // okay, definitely a boolean
+
+El anytipo es una forma poderosa de trabajar con JavaScript existente, lo que le permite activar y desactivar gradualmente la verificación de tipos durante la compilación. Puede esperar Objectjugar un papel similar, como lo hace en otros idiomas. Sin embargo, las variables de tipo Objectsolo le permiten asignarles cualquier valor. No puede invocar métodos arbitrarios en ellos, incluso los que realmente existen:
+
+let notSure: any = 4;
+notSure.ifItExists(); // okay, ifItExists might exist at runtime
+notSure.toFixed(); // okay, toFixed exists (but the compiler doesn't check)
+
+let prettySure: Object = 4;
+prettySure.toFixed(); // Error: Property 'toFixed' doesn't exist on type 'Object'.
+
+El anytipo también es útil si conoce alguna parte del tipo, pero quizás no toda. Por ejemplo, puede tener una matriz, pero la matriz tiene una combinación de diferentes tipos:
+
+let list: any[] = [1, true, "free"];
+
+list[1] = 100;
+Object
+objectes un tipo que representa el tipo no primitivo, es decir, todo lo que no es number, string, boolean, symbol, null, o undefined.
+
+Con el objecttipo, las API como Object.createse pueden representar mejor. Por ejemplo:
+
+declare function create(o: object | null): void;
+
+create({ prop: 0 }); // OK
+create(null); // OK
+
+create(42); // Error
+create("string"); // Error
+create(false); // Error
+create(undefined); // Error
+
+
+
+¿Por qué al ingresar este código el Output es ‘si’? En el editor si me señala el error, pero pensé que en el navegador me tiraría algún error o algo.
+
+let muted: boolean = true
+muted = false;
+muted = 'si';
+
+console.log(muted); // Output: si
+
+Efectivamente Typescript solo te permite manejar los errores en el IDE, esto es porque para poder correr tu código en el navegador es necesario convertirlo a Javascript natural.
+
+TypeScript sirve para evitar errores en tiempo de codificación, al momento que se corre en el navegador es con una versión transpilada de la aplicación en JavaScript. Habría formas de correr TypeScipt como con ts-node y darte cuenta de algún error de este tipo en ejecución, aunque será complicado que si los haya TypeScript te deje ejecutar el programa.
